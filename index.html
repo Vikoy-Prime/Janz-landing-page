@@ -247,7 +247,11 @@
     .footer-top{grid-template-columns:1fr;}
     .compare-band .row{grid-template-columns:1fr;gap:6px;text-align:left;}
     .compare-band .row span{text-align:left;}
-    .nav{flex-wrap:wrap;}
+    .nav{flex-wrap:wrap;justify-content:center;text-align:center;}
+    .nav .brand{justify-content:center;width:100%;}
+    .hero > div:first-child{text-align:center;}
+    .hero > div:first-child .lead{margin-left:auto;margin-right:auto;}
+    .hero .cta-row{justify-content:center;}
   }
 </style>
 </head>
@@ -284,7 +288,7 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
         </button>
       </div>
-      <button class="nav-cta" onclick="showPage('contact')">Get a Proposal</button>
+      <button class="nav-cta" onclick="showPage('contact')">Get a Quote</button>
     </div>
   </div>
 </header>
@@ -294,9 +298,9 @@
   <div class="wrap hero-section">
     <div class="hero">
       <div>
-        <p class="eyebrow">LIFE &nbsp;·&nbsp; HEALTH &nbsp;·&nbsp; ACCIDENT &nbsp;·&nbsp; INVESTMENT</p>
+        <p class="eyebrow">LIFE &nbsp;·&nbsp; HEALTH &nbsp;·&nbsp; ACCIDENT &nbsp;·&nbsp; INVESTMENT &nbsp;·&nbsp; EDUCATION &nbsp;·&nbsp; RETIREMENT</p>
         <h1>Protect What<br>Matters Most</h1>
-        <p class="lead">I help individuals and families secure their future with the right insurance plans - customized for your needs and goals.</p>
+        <p class="lead">I help individuals and families secure their future with the right insurance plans — customized for your needs and goals.</p>
         <div class="cta-row">
           <button class="btn-primary" onclick="showPage('contact')">Get a Free Consultation</button>
           <button class="btn-ghost" onclick="showPage('products')">See Our Plans</button>
@@ -408,7 +412,7 @@
         </div>
         <h3>Call or Text</h3>
         <p>Available Mon&ndash;Sat, 9am&ndash;6pm</p>
-        <span class="value">0919 087 8939</span>
+        <span class="value">0912 123 1234</span>
       </div>
       <div class="contact-card">
         <div class="icon">
@@ -416,7 +420,7 @@
         </div>
         <h3>Email</h3>
         <p>For quotes, questions, and policy support</p>
-        <span class="value">balanonjanice@gmail.com</span>
+        <span class="value">care@askmejanice.com</span>
       </div>
     </div>
 
@@ -476,11 +480,11 @@
         <ul>
           <li class="contact-line">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6.3 6.3l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2.1z" stroke="currentColor" stroke-width="1.4"/></svg>
-            0919 087 8939
+            0912 123 1234
           </li>
           <li class="contact-line">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M2 6l10 7 10-7" stroke="currentColor" stroke-width="1.4"/></svg>
-            balanonjanice@gmail.com
+            care@askmejanice.com
           </li>
         </ul>
       </div>
@@ -525,7 +529,7 @@
     ];
     var body = bodyLines.join('\n');
 
-    var mailtoLink = 'mailto:balanonjanice@gmail.com'
+    var mailtoLink = 'mailto:care@askmejanice.com'
       + '?subject=' + encodeURIComponent(subject)
       + '&body=' + encodeURIComponent(body);
 
