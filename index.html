@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -119,7 +119,11 @@
   .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
 
   /* ---------- PAGE 1: HERO ---------- */
-  .hero-section{padding:88px 0 0;}
+  /* The trust strip scrolls upward over the sticky hero. */
+  .hero-stage{position:relative;min-height:calc(100vh + 240px);background:var(--bg);}
+  .hero-section{position:sticky;top:0;z-index:1;min-height:100vh;padding:88px 0 0;background:var(--bg);}
+  .hero-stage .trust-strip{position:relative;z-index:2;background:var(--bg-alt);box-shadow:0 -18px 32px rgba(58,46,34,.12);}
+  html[data-theme="dark"] .hero-stage .trust-strip{box-shadow:0 -18px 32px rgba(0,0,0,.28);}
   .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;padding-bottom:70px;}
   .hero h1{font-size:46px;line-height:1.12;letter-spacing:-.5px;}
   .hero p.lead{margin-top:20px;font-size:16.5px;color:var(--slate);max-width:440px;}
@@ -240,7 +244,16 @@
   }
   .social a:hover{background:var(--accent);}
 
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .hero-stage{min-height:auto;}
+    .hero-section{position:relative;min-height:auto;}
+  }
+
   @media (max-width:900px){
+    .hero-stage{min-height:auto;}
+    .hero-section{position:relative;min-height:auto;padding-top:56px;}
+    .hero-stage .trust-strip{box-shadow:none;}
     .nav-links{display:none;}
     .hero, .split-banner, .contact-grid, .form-panel{grid-template-columns:1fr;}
     .grid-3{grid-template-columns:1fr;}
@@ -295,6 +308,7 @@
 
 <!-- ============ PAGE 1 — HERO ============ -->
 <section id="page-hero" class="page active">
+  <div class="hero-stage">
   <div class="wrap hero-section">
     <div class="hero">
       <div>
@@ -319,6 +333,7 @@
       <div class="trust-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" stroke="currentColor" stroke-width="1.6"/></svg> Personalized Planning</div>
       <div class="trust-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12h16M4 6h16M4 18h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Ongoing Policy Support</div>
     </div>
+  </div>
   </div>
 
   <div class="wrap">
