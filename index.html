@@ -360,19 +360,149 @@
 
   @media (max-width:900px){
     .hero-stage{min-height:auto;}
-    .hero-section{position:relative;min-height:auto;padding-top:56px;}
+    .hero-section{position:relative;min-height:auto;padding-top:42px;}
     .hero-stage .trust-strip{box-shadow:none;}
-    .nav-links{display:none;}
-    .hero, .split-banner, .contact-grid, .form-panel{grid-template-columns:1fr;}
-    .grid-3{grid-template-columns:1fr;}
+
+    /* Keep Home / Products / Contact visible on mobile */
+    .nav{
+      flex-wrap:wrap;
+      justify-content:center;
+      text-align:center;
+      padding:12px 18px;
+      gap:10px;
+    }
+
+    .nav .brand{
+      justify-content:center;
+      width:100%;
+      order:1;
+    }
+
+    .nav-links{
+      display:flex;
+      width:100%;
+      order:2;
+      justify-content:center;
+      gap:4px;
+      padding:4px;
+      overflow:visible;
+    }
+
+    .nav-links button{
+      flex:1 1 0;
+      max-width:130px;
+      padding:9px 10px;
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    .nav-right{
+      order:3;
+      width:100%;
+      justify-content:center;
+      gap:10px;
+    }
+
+    .nav-cta{
+      padding:10px 17px;
+      font-size:13px;
+    }
+
+    .hero,
+    .split-banner,
+    .contact-grid,
+    .form-panel{
+      grid-template-columns:1fr;
+    }
+
+    /* Products must always be readable on mobile */
+    .grid-3{
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+
+    #page-products .section{
+      padding-top:48px;
+      padding-bottom:60px;
+    }
+
+    #page-products .section-head{
+      margin-bottom:28px;
+    }
+
+    #page-products .card{
+      width:100%;
+      min-width:0;
+    }
+
+    #page-products .compare-band{
+      padding:28px 20px;
+      margin-top:26px;
+    }
+
+    /* Do not let reveal animation keep hidden product content invisible
+       after switching tabs on mobile. */
+    #page-products.active .reveal-on-scroll{
+      opacity:1 !important;
+      transform:none !important;
+    }
+
     .footer-top{grid-template-columns:1fr;}
-    .compare-band .row{grid-template-columns:1fr;gap:6px;text-align:left;}
-    .compare-band .row span{text-align:left;}
-    .nav{flex-wrap:wrap;justify-content:center;text-align:center;}
-    .nav .brand{justify-content:center;width:100%;}
+
+    .compare-band .row{
+      grid-template-columns:1fr;
+      gap:6px;
+      text-align:left;
+    }
+
+    .compare-band .row span{
+      text-align:left;
+    }
+
     .hero > div:first-child{text-align:center;}
     .hero > div:first-child .lead{margin-left:auto;margin-right:auto;}
     .hero .cta-row{justify-content:center;}
+  }
+
+  @media (max-width:560px){
+    .wrap{padding-left:18px;padding-right:18px;}
+
+    .brand-name{font-size:18px;}
+
+    .nav-links button{
+      font-size:12.5px;
+      padding:8px 7px;
+    }
+
+    .nav-right{
+      flex-wrap:wrap;
+    }
+
+    .theme-toggle{
+      padding:4px 6px;
+    }
+
+    .nav-cta{
+      padding:10px 15px;
+    }
+
+    .section{
+      padding-top:48px;
+      padding-bottom:56px;
+    }
+
+    .section-head h2{
+      font-size:28px;
+    }
+
+    .contact-hero h1{
+      font-size:32px;
+    }
+
+    .form-panel form,
+    .form-panel .side{
+      padding:34px 22px;
+    }
   }
 
   /* ---------- MOTION PREVIEW ---------- */
@@ -514,7 +644,7 @@
 
 <header>
   <div class="nav">
-    <a href="#" class="brand">
+    <a href="#" class="brand" onclick="showPage('hero'); return false;" aria-label="Go to Home">
       <span class="logo-mark">
         <svg width="40" height="40" viewBox="0 0 42 42" fill="none">
           <path class="shield-outer" d="M21 2 L38 8 V19 C38 29 31 36.5 21 40 C11 36.5 4 29 4 19 V8 Z"/>
