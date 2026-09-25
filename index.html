@@ -118,6 +118,29 @@
   }
   .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
 
+
+  /* ---------- Hero CTA attention pulse ---------- */
+  #page-hero .cta-row .btn-primary,
+  #page-hero .cta-row .btn-ghost{
+    animation:consultationPulse 1.8s ease-in-out infinite;
+    will-change:transform, box-shadow;
+  }
+
+  #page-hero .cta-row .btn-ghost{
+    animation-delay:.9s;
+  }
+
+  @keyframes consultationPulse{
+    0%, 100%{
+      transform:translateY(0) scale(1);
+      box-shadow:0 6px 14px rgba(149,80,42,.10);
+    }
+    50%{
+      transform:translateY(-1px) scale(1.035);
+      box-shadow:0 0 0 7px rgba(188,108,63,.10), 0 12px 26px rgba(149,80,42,.24);
+    }
+  }
+
   /* ---------- PAGE 1: HERO ---------- */
   /* The trust strip scrolls upward over the sticky hero. */
   .hero-stage{position:relative;min-height:calc(100vh + 240px);background:var(--bg);}
@@ -327,6 +350,9 @@
   .social a:hover{background:var(--accent);}
 
   @media (prefers-reduced-motion: reduce){
+    #page-hero .cta-row .btn-primary,
+    #page-hero .cta-row .btn-ghost{animation:none !important;}
+
     html{scroll-behavior:auto;}
     .hero-stage{min-height:auto;}
     .hero-section{position:relative;min-height:auto;}
@@ -533,7 +559,7 @@
         <p class="lead">I help individuals and families secure their future with the right insurance plans - customized for your needs and goals.</p>
         <div class="cta-row">
           <button class="btn-primary" onclick="showPage('contact')">Get a Free Consultation</button>
-          <button class="btn-ghost" onclick="showPage('products')">See Our Products</button>
+          <button class="btn-ghost" onclick="showPage('products')">See Our Plans</button>
         </div>
       </div>
       <div class="hero-art">
