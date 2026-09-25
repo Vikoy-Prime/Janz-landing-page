@@ -227,6 +227,53 @@
   .form-panel textarea{min-height:90px;resize:vertical;}
 
 
+
+  /* ---------- Contact form validation ---------- */
+  .form-field{
+    position:relative;
+  }
+
+  .field-error{
+    display:none;
+    margin-top:7px;
+    font-size:12.5px;
+    line-height:1.35;
+    color:#B42318;
+    font-weight:600;
+  }
+
+  .field-error.show{
+    display:block;
+  }
+
+  .form-panel input.input-error,
+  .form-panel textarea.input-error{
+    border-color:#B42318;
+    background:rgba(180,35,24,.045);
+    box-shadow:0 0 0 3px rgba(180,35,24,.08);
+  }
+
+  .form-panel input.input-valid,
+  .form-panel textarea.input-valid{
+    border-color:rgba(46,125,75,.55);
+  }
+
+  .required-mark{
+    color:#B42318;
+    margin-left:2px;
+  }
+
+  html[data-theme="dark"] .field-error{
+    color:#FF9B8F;
+  }
+
+  html[data-theme="dark"] .form-panel input.input-error,
+  html[data-theme="dark"] .form-panel textarea.input-error{
+    border-color:#FF8D82;
+    background:rgba(255,141,130,.06);
+    box-shadow:0 0 0 3px rgba(255,141,130,.08);
+  }
+
   /* ---------- Formspree form protection / status ---------- */
   .form-honeypot{
     position:absolute !important;
@@ -621,10 +668,9 @@
           balanonjanice@gmail.com
         </div>
       </div>
-      <!-- Replace YOUR_FORM_ID with the Formspree endpoint ID from the Integration tab. -->
-      <form id="contact-form" action="https://formspree.io/f/mrpbzbgq" method="POST">
-        <div>
-          <label for="cf-name">Full name</label>
+      <form id="contact-form" action="https://formspree.io/f/mrpbzbgq" method="POST" novalidate>
+        <div class="form-field">
+          <label for="cf-name">Full name <span class="required-mark">*</span></label>
           <input
             type="text"
             id="cf-name"
@@ -632,11 +678,14 @@
             placeholder="Juan Dela Cruz"
             autocomplete="name"
             maxlength="100"
+            aria-describedby="cf-name-error"
             required
           >
+          <div class="field-error" id="cf-name-error">Please enter your full name.</div>
         </div>
-        <div>
-          <label for="cf-email">Email address</label>
+
+        <div class="form-field">
+          <label for="cf-email">Email address <span class="required-mark">*</span></label>
           <input
             type="email"
             id="cf-email"
@@ -644,32 +693,42 @@
             placeholder="you@email.com"
             autocomplete="email"
             maxlength="150"
+            aria-describedby="cf-email-error"
             required
           >
+          <div class="field-error" id="cf-email-error">Please enter a valid email address.</div>
         </div>
-        <div>
-          <label for="cf-phone">Phone number</label>
+
+        <div class="form-field">
+          <label for="cf-phone">Phone number <span class="required-mark">*</span></label>
           <input
             type="tel"
             id="cf-phone"
             name="phone"
             placeholder="09xx xxx xxxx"
             autocomplete="tel"
-            maxlength="30"
+            inputmode="tel"
+            maxlength="20"
+            aria-describedby="cf-phone-error"
+            required
           >
+          <div class="field-error" id="cf-phone-error">Please enter a valid Philippine mobile number, e.g. 0919 123 4567.</div>
         </div>
-        <div>
-          <label for="cf-message">What are you interested in?</label>
+
+        <div class="form-field">
+          <label for="cf-message">What are you interested in? <span class="required-mark">*</span></label>
           <textarea
             id="cf-message"
             name="message"
             placeholder="e.g. Life insurance for my family"
             maxlength="2000"
+            aria-describedby="cf-message-error"
             required
           ></textarea>
+          <div class="field-error" id="cf-message-error">Please tell us what you are interested in.</div>
         </div>
 
-        <!-- Formspree honeypot: real visitors never interact with this field. -->
+        <!-- Formspree honeypot: hidden from real visitors. -->
         <div class="form-honeypot" aria-hidden="true">
           <label for="cf-gotcha">Leave this field empty</label>
           <input
@@ -749,7 +808,7 @@
   });
 
 
-  /* ---------- Formspree submission ---------- */
+  /* ---------- Formspree submission + validation ---------- */
   (function(){
     var form = document.getElementById('contact-form');
     if(!form) return;
@@ -757,32 +816,150 @@
     var submitBtn = document.getElementById('contact-submit');
     var statusBox = document.getElementById('form-status');
 
+    var fields = {
+      name: document.getElementById('cf-name'),
+      email: document.getElementById('cf-email'),
+      phone: document.getElementById('cf-phone'),
+      message: document.getElementById('cf-message')
+    };
+
     function setStatus(message, type){
       statusBox.textContent = message;
       statusBox.className = 'form-status show ' + type;
     }
 
+    function clearStatus(){
+      statusBox.textContent = '';
+      statusBox.className = 'form-status';
+    }
+
+    function setFieldState(input, errorId, valid, message){
+      var error = document.getElementById(errorId);
+
+      input.classList.toggle('input-error', !valid);
+      input.classList.toggle('input-valid', valid && input.value.trim() !== '');
+      input.setAttribute('aria-invalid', valid ? 'false' : 'true');
+
+      if(error){
+        if(message) error.textContent = message;
+        error.classList.toggle('show', !valid);
+      }
+
+      return valid;
+    }
+
+    function validateName(){
+      var value = fields.name.value.trim();
+      return setFieldState(
+        fields.name,
+        'cf-name-error',
+        value.length >= 2,
+        value ? 'Please enter your complete name.' : 'Please enter your full name.'
+      );
+    }
+
+    function validateEmail(){
+      var value = fields.email.value.trim();
+      var valid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+
+      return setFieldState(
+        fields.email,
+        'cf-email-error',
+        valid,
+        value ? 'Please enter a valid email address.' : 'Email address is required.'
+      );
+    }
+
+    function validatePhone(){
+      var raw = fields.phone.value.trim();
+      var normalized = raw.replace(/[\s().-]/g, '');
+      var valid = /^(?:\+63|0)9\d{9}$/.test(normalized);
+
+      return setFieldState(
+        fields.phone,
+        'cf-phone-error',
+        valid,
+        raw
+          ? 'Please enter a valid Philippine mobile number, e.g. 0919 123 4567.'
+          : 'Phone number is required.'
+      );
+    }
+
+    function validateMessage(){
+      var value = fields.message.value.trim();
+
+      return setFieldState(
+        fields.message,
+        'cf-message-error',
+        value.length >= 5,
+        value
+          ? 'Please provide a little more detail.'
+          : 'Please tell us what you are interested in.'
+      );
+    }
+
+    function validateForm(){
+      var results = [
+        validateName(),
+        validateEmail(),
+        validatePhone(),
+        validateMessage()
+      ];
+
+      return results.every(Boolean);
+    }
+
+    Object.keys(fields).forEach(function(key){
+      var field = fields[key];
+
+      field.addEventListener('input', function(){
+        clearStatus();
+
+        if(field.classList.contains('input-error')){
+          if(key === 'name') validateName();
+          if(key === 'email') validateEmail();
+          if(key === 'phone') validatePhone();
+          if(key === 'message') validateMessage();
+        }
+      });
+
+      field.addEventListener('blur', function(){
+        if(key === 'name') validateName();
+        if(key === 'email') validateEmail();
+        if(key === 'phone') validatePhone();
+        if(key === 'message') validateMessage();
+      });
+    });
+
     form.addEventListener('submit', async function(e){
       e.preventDefault();
+      clearStatus();
 
-      if(form.action.indexOf('YOUR_FORM_ID') !== -1){
-        setStatus('Formspree is not connected yet. Replace YOUR_FORM_ID with your Formspree form ID.', 'error');
+      if(!validateForm()){
+        setStatus('Please check the highlighted fields before sending.', 'error');
+
+        var firstInvalid = form.querySelector('.input-error');
+        if(firstInvalid){
+          firstInvalid.focus();
+          firstInvalid.scrollIntoView({behavior:'smooth', block:'center'});
+        }
         return;
       }
 
       // Extra client-side honeypot check. Formspree also receives _gotcha.
       var gotcha = document.getElementById('cf-gotcha');
       if(gotcha && gotcha.value.trim() !== ''){
-        // Silently behave like a successful submission for obvious bots.
         form.reset();
+        Object.keys(fields).forEach(function(key){
+          fields[key].classList.remove('input-error','input-valid');
+          fields[key].setAttribute('aria-invalid','false');
+        });
         setStatus('Thank you. Your message has been sent.', 'success');
         return;
       }
 
       submitBtn.disabled = true;
       submitBtn.textContent = 'Sending...';
-      statusBox.className = 'form-status';
-      statusBox.textContent = '';
 
       try{
         var response = await fetch(form.action, {
@@ -795,14 +972,26 @@
 
         if(response.ok){
           form.reset();
+
+          Object.keys(fields).forEach(function(key){
+            fields[key].classList.remove('input-error','input-valid');
+            fields[key].setAttribute('aria-invalid','false');
+          });
+
+          document.querySelectorAll('.field-error').forEach(function(el){
+            el.classList.remove('show');
+          });
+
           setStatus("Message sent successfully. Thank you! I'll get back to you soon.", 'success');
         }else{
           var data = {};
           try{ data = await response.json(); }catch(_err){}
+
           var msg = 'Sorry, your message could not be sent. Please try again.';
           if(data && Array.isArray(data.errors) && data.errors.length){
             msg = data.errors.map(function(item){ return item.message; }).join(' ');
           }
+
           setStatus(msg, 'error');
         }
       }catch(err){
