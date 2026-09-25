@@ -1,4 +1,4 @@
-      <!DOCTYPE html>
+       <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -69,9 +69,34 @@
     transition:background .25s ease, border-color .25s ease;
   }
   .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;max-width:1180px;margin:0 auto;gap:20px;}
-  .brand{display:flex;align-items:center;gap:12px;}
-  .brand-name{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink);line-height:1.1;}
-  .brand-sub{font-size:10px;letter-spacing:1.6px;color:var(--slate);display:block;margin-top:1px;}
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .brand-name{
+    font-family:var(--serif);
+    font-size:24px;
+    font-weight:700;
+    color:var(--ink);
+    line-height:1;
+    letter-spacing:-.2px;
+  }
+  .brand-sub{
+    font-size:10px;
+    letter-spacing:2.7px;
+    color:var(--slate);
+    display:block;
+    margin-top:6px;
+    line-height:1;
+  }
+  .brand-text{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-width:0;
+  }
+
   .nav-links{display:flex;align-items:center;gap:8px;background:var(--bg-alt);padding:5px;border-radius:100px;border:1px solid var(--line);}
   .nav-links button{
     border:none;background:transparent;padding:9px 18px;border-radius:100px;font-size:14px;
@@ -102,11 +127,23 @@
   .logo-mark svg path.shield-check{stroke:#fff;}
 
 
+  .logo-mark{
+    width:54px;
+    height:54px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 54px;
+    overflow:visible;
+  }
+
   .janice-logo{
-    width:40px;
-    height:40px;
+    width:54px;
+    height:54px;
     object-fit:contain;
     display:block;
+    transform:scale(1.20);
+    transform-origin:center;
   }
 
   /* ---------- Page mechanics ---------- */
@@ -953,23 +990,32 @@
     }
 
     .nav .brand{
-      gap:8px;
-      margin-bottom:1px;
+      gap:11px;
+      margin-bottom:2px;
+    }
+
+    .logo-mark{
+      width:44px;
+      height:44px;
+      flex-basis:44px;
     }
 
     .janice-logo{
-      width:32px;
-      height:32px;
+      width:44px;
+      height:44px;
+      transform:scale(1.18);
     }
 
     .brand-name{
-      font-size:17px;
+      font-size:20px;
+      line-height:1;
     }
 
     .brand-sub{
-      font-size:8.5px;
-      letter-spacing:1.25px;
-      margin-top:2px;
+      font-size:9px;
+      letter-spacing:2.1px;
+      margin-top:5px;
+      line-height:1;
     }
 
     .nav-links{
@@ -1325,7 +1371,19 @@
     }
 
     .brand-name{
-      font-size:16px;
+      font-size:18px;
+    }
+
+    .logo-mark{
+      width:40px;
+      height:40px;
+      flex-basis:40px;
+    }
+
+    .janice-logo{
+      width:40px;
+      height:40px;
+      transform:scale(1.16);
     }
 
     .nav-links button{
@@ -1499,7 +1557,7 @@
           class="janice-logo"
         >
       </span>
-      <span>
+      <span class="brand-text">
         <span class="brand-name">Janice Balanon</span>
         <span class="brand-sub">INSURANCE&nbsp;ADVISOR</span>
       </span>
