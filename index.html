@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -266,6 +266,140 @@
     .hero > div:first-child .lead{margin-left:auto;margin-right:auto;}
     .hero .cta-row{justify-content:center;}
   }
+
+  /* ---------- MOTION PREVIEW ---------- */
+  :root{--ease-premium:cubic-bezier(.22,1,.36,1);}
+
+  /* Smooth page entrance when switching Home / Products / Contact */
+  .page.active{
+    animation:pageEnter .48s var(--ease-premium) both;
+  }
+  @keyframes pageEnter{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  /* Hero entrance sequence */
+  #page-hero.active .hero > div:first-child .eyebrow{
+    animation:heroRise .65s .08s var(--ease-premium) both;
+  }
+  #page-hero.active .hero > div:first-child h1{
+    animation:heroRise .78s .18s var(--ease-premium) both;
+  }
+  #page-hero.active .hero > div:first-child .lead{
+    animation:heroRise .72s .32s var(--ease-premium) both;
+  }
+  #page-hero.active .hero > div:first-child .cta-row{
+    animation:heroRise .72s .46s var(--ease-premium) both;
+  }
+  #page-hero.active .hero-art{
+    animation:heroArtIn .95s .16s var(--ease-premium) both;
+  }
+  #page-hero.active .hero-art .card-float{
+    animation:floatCardIn .8s .66s var(--ease-premium) both;
+  }
+  @keyframes heroRise{
+    from{opacity:0;transform:translateY(24px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes heroArtIn{
+    from{opacity:0;transform:translateY(18px) scale(.975);}
+    to{opacity:1;transform:translateY(0) scale(1);}
+  }
+  @keyframes floatCardIn{
+    from{opacity:0;transform:translateY(28px) scale(.985);}
+    to{opacity:1;transform:translateY(0) scale(1);}
+  }
+
+  /* Cinematic, barely-there movement on hero photo */
+  .hero-art img{
+    transform:scale(1.015);
+    animation:heroKenBurns 12s ease-in-out infinite alternate;
+    will-change:transform;
+  }
+  @keyframes heroKenBurns{
+    from{transform:scale(1.015) translate3d(0,0,0);}
+    to{transform:scale(1.055) translate3d(-.45%,-.35%,0);}
+  }
+
+  /* Scroll reveal */
+  .reveal-on-scroll{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .7s var(--ease-premium), transform .7s var(--ease-premium);
+    will-change:opacity,transform;
+  }
+  .reveal-on-scroll.is-visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .reveal-on-scroll[data-delay="1"]{transition-delay:.08s;}
+  .reveal-on-scroll[data-delay="2"]{transition-delay:.16s;}
+  .reveal-on-scroll[data-delay="3"]{transition-delay:.24s;}
+
+  /* Premium hover states */
+  .card,
+  .contact-card,
+  .hero-art .card-float{
+    transition:transform .34s var(--ease-premium), box-shadow .34s ease, border-color .25s ease;
+  }
+  .card:hover,
+  .contact-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 38px rgba(58,46,34,.10);
+    border-color:var(--accent);
+  }
+  html[data-theme="dark"] .card:hover,
+  html[data-theme="dark"] .contact-card:hover{
+    box-shadow:0 20px 44px rgba(0,0,0,.25);
+  }
+  .card .icon,
+  .contact-card .icon,
+  .stat-icon{
+    transition:transform .34s var(--ease-premium), background .25s ease;
+  }
+  .card:hover .icon,
+  .contact-card:hover .icon{
+    transform:scale(1.08) rotate(-2deg);
+  }
+  .card .learn{
+    transition:transform .25s ease,color .25s ease;
+  }
+  .card:hover .learn{transform:translateX(4px);}
+
+  .btn-primary,.btn-ghost,.nav-cta{
+    transition:transform .22s var(--ease-premium), box-shadow .22s ease, background .22s ease, color .22s ease, border-color .22s ease;
+  }
+  .btn-primary:hover,.nav-cta:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px rgba(149,80,42,.18);
+  }
+  .btn-ghost:hover{transform:translateY(-2px);}
+
+  /* Sticky header gains a soft floating shadow after scrolling */
+  header.scrolled{
+    box-shadow:0 10px 30px rgba(58,46,34,.07);
+  }
+  html[data-theme="dark"] header.scrolled{box-shadow:0 12px 34px rgba(0,0,0,.22);}
+
+  @media (prefers-reduced-motion: reduce){
+    .page.active,
+    #page-hero.active .hero > div:first-child .eyebrow,
+    #page-hero.active .hero > div:first-child h1,
+    #page-hero.active .hero > div:first-child .lead,
+    #page-hero.active .hero > div:first-child .cta-row,
+    #page-hero.active .hero-art,
+    #page-hero.active .hero-art .card-float,
+    .hero-art img{
+      animation:none !important;
+    }
+    .reveal-on-scroll{
+      opacity:1 !important;
+      transform:none !important;
+      transition:none !important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -561,6 +695,71 @@
       });
     });
   });
+
+  /* ---------- MOTION PREVIEW ---------- */
+  (function(){
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var revealTargets = document.querySelectorAll(
+      '.trust-item, .split-banner, .section-head, .card, .compare-band, .contact-hero, .contact-card, .form-panel, .footer-brand, .footer-col'
+    );
+
+    revealTargets.forEach(function(el, index){
+      el.classList.add('reveal-on-scroll');
+      var parent = el.parentElement;
+      if(parent && (parent.classList.contains('grid-3') || parent.classList.contains('contact-grid') || parent.classList.contains('footer-top') || parent.classList.contains('wrap'))){
+        el.dataset.delay = String((index % 3) + 1);
+      }
+    });
+
+    function revealVisible(){
+      document.querySelectorAll('.reveal-on-scroll').forEach(function(el){
+        var rect = el.getBoundingClientRect();
+        if(rect.top < window.innerHeight * .92 && rect.bottom > 0){
+          el.classList.add('is-visible');
+        }
+      });
+    }
+
+    if(reduceMotion){
+      revealTargets.forEach(function(el){ el.classList.add('is-visible'); });
+    }else if('IntersectionObserver' in window){
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {threshold:.12, rootMargin:'0px 0px -4% 0px'});
+      revealTargets.forEach(function(el){ observer.observe(el); });
+    }else{
+      revealVisible();
+      window.addEventListener('scroll', revealVisible, {passive:true});
+    }
+
+    window.addEventListener('scroll', function(){
+      document.querySelector('header').classList.toggle('scrolled', window.scrollY > 20);
+    }, {passive:true});
+
+    /* Re-check reveal positions after the custom page tabs switch. */
+    var originalShowPage = window.showPage;
+    window.showPage = function(name){
+      originalShowPage(name);
+      requestAnimationFrame(function(){
+        document.querySelectorAll('#page-' + name + ' .reveal-on-scroll').forEach(function(el){
+          var rect = el.getBoundingClientRect();
+          if(rect.top < window.innerHeight * .95){ el.classList.add('is-visible'); }
+        });
+      });
+    };
+
+    /* Existing inline onclick handlers resolve the global function; nav listeners are refreshed here. */
+    document.querySelectorAll('#page-nav button').forEach(function(btn){
+      btn.onclick = function(){ window.showPage(btn.dataset.page); };
+    });
+  })();
+
 </script>
 
 </body>
