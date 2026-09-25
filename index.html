@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -225,6 +225,41 @@
   }
   .form-panel input:focus, .form-panel textarea:focus{outline:2px solid var(--accent);border-color:transparent;}
   .form-panel textarea{min-height:90px;resize:vertical;}
+
+
+  /* ---------- Formspree form protection / status ---------- */
+  .form-honeypot{
+    position:absolute !important;
+    left:-9999px !important;
+    width:1px !important;
+    height:1px !important;
+    overflow:hidden !important;
+    opacity:0 !important;
+    pointer-events:none !important;
+  }
+  .form-status{
+    display:none;
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:13.5px;
+    line-height:1.4;
+  }
+  .form-status.show{display:block;}
+  .form-status.success{
+    background:rgba(64,130,88,.12);
+    border:1px solid rgba(64,130,88,.28);
+    color:var(--ink);
+  }
+  .form-status.error{
+    background:rgba(180,70,55,.10);
+    border:1px solid rgba(180,70,55,.24);
+    color:var(--ink);
+  }
+  #contact-submit[disabled]{
+    opacity:.68;
+    cursor:not-allowed;
+    transform:none;
+  }
 
   /* ---------- Footer ---------- */
   footer{background:var(--footer-bg);color:var(--footer-ink);padding:56px 0 26px;transition:background .25s ease;}
@@ -586,24 +621,76 @@
           balanonjanice@gmail.com
         </div>
       </div>
-      <form id="contact-form" onsubmit="return sendInquiry(event);">
+      <!-- Replace YOUR_FORM_ID with the Formspree endpoint ID from the Integration tab. -->
+      <form id="contact-form" action="https://formspree.io/f/mrpbzbgq" method="POST">
         <div>
-          <label>Full name</label>
-          <input type="text" id="cf-name" placeholder="Juan Dela Cruz" required>
+          <label for="cf-name">Full name</label>
+          <input
+            type="text"
+            id="cf-name"
+            name="name"
+            placeholder="Juan Dela Cruz"
+            autocomplete="name"
+            maxlength="100"
+            required
+          >
         </div>
         <div>
-          <label>Email address</label>
-          <input type="email" id="cf-email" placeholder="you@email.com" required>
+          <label for="cf-email">Email address</label>
+          <input
+            type="email"
+            id="cf-email"
+            name="email"
+            placeholder="you@email.com"
+            autocomplete="email"
+            maxlength="150"
+            required
+          >
         </div>
         <div>
-          <label>Phone number</label>
-          <input type="tel" id="cf-phone" placeholder="09xx xxx xxxx">
+          <label for="cf-phone">Phone number</label>
+          <input
+            type="tel"
+            id="cf-phone"
+            name="phone"
+            placeholder="09xx xxx xxxx"
+            autocomplete="tel"
+            maxlength="30"
+          >
         </div>
         <div>
-          <label>What are you interested in?</label>
-          <textarea id="cf-message" placeholder="e.g. Life insurance for my family"></textarea>
+          <label for="cf-message">What are you interested in?</label>
+          <textarea
+            id="cf-message"
+            name="message"
+            placeholder="e.g. Life insurance for my family"
+            maxlength="2000"
+            required
+          ></textarea>
         </div>
-        <button type="submit" class="btn-primary" style="width:100%;">Send Message</button>
+
+        <!-- Formspree honeypot: real visitors never interact with this field. -->
+        <div class="form-honeypot" aria-hidden="true">
+          <label for="cf-gotcha">Leave this field empty</label>
+          <input
+            type="text"
+            id="cf-gotcha"
+            name="_gotcha"
+            tabindex="-1"
+            autocomplete="off"
+          >
+        </div>
+
+        <div id="form-status" class="form-status" role="status" aria-live="polite"></div>
+
+        <button
+          type="submit"
+          id="contact-submit"
+          class="btn-primary"
+          style="width:100%;"
+        >
+          Send Message
+        </button>
       </form>
     </div>
   </div>
@@ -660,31 +747,72 @@
   document.querySelectorAll('#page-nav button').forEach(function(btn){
     btn.addEventListener('click', function(){ showPage(btn.dataset.page); });
   });
-  function sendInquiry(e){
-    e.preventDefault();
-    var name = document.getElementById('cf-name').value.trim();
-    var email = document.getElementById('cf-email').value.trim();
-    var phone = document.getElementById('cf-phone').value.trim();
-    var message = document.getElementById('cf-message').value.trim();
 
-    var subject = 'New inquiry from ' + name + ' (via website)';
-    var bodyLines = [
-      'Name: ' + name,
-      'Email: ' + email,
-      'Phone: ' + (phone || 'Not provided'),
-      '',
-      'Interested in:',
-      message || 'Not specified'
-    ];
-    var body = bodyLines.join('\n');
 
-    var mailtoLink = 'mailto:balanonjanice@gmail.com'
-      + '?subject=' + encodeURIComponent(subject)
-      + '&body=' + encodeURIComponent(body);
+  /* ---------- Formspree submission ---------- */
+  (function(){
+    var form = document.getElementById('contact-form');
+    if(!form) return;
 
-    window.location.href = mailtoLink;
-    return false;
-  }
+    var submitBtn = document.getElementById('contact-submit');
+    var statusBox = document.getElementById('form-status');
+
+    function setStatus(message, type){
+      statusBox.textContent = message;
+      statusBox.className = 'form-status show ' + type;
+    }
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+
+      if(form.action.indexOf('YOUR_FORM_ID') !== -1){
+        setStatus('Formspree is not connected yet. Replace YOUR_FORM_ID with your Formspree form ID.', 'error');
+        return;
+      }
+
+      // Extra client-side honeypot check. Formspree also receives _gotcha.
+      var gotcha = document.getElementById('cf-gotcha');
+      if(gotcha && gotcha.value.trim() !== ''){
+        // Silently behave like a successful submission for obvious bots.
+        form.reset();
+        setStatus('Thank you. Your message has been sent.', 'success');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      statusBox.className = 'form-status';
+      statusBox.textContent = '';
+
+      try{
+        var response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if(response.ok){
+          form.reset();
+          setStatus("Message sent successfully. Thank you! I'll get back to you soon.", 'success');
+        }else{
+          var data = {};
+          try{ data = await response.json(); }catch(_err){}
+          var msg = 'Sorry, your message could not be sent. Please try again.';
+          if(data && Array.isArray(data.errors) && data.errors.length){
+            msg = data.errors.map(function(item){ return item.message; }).join(' ');
+          }
+          setStatus(msg, 'error');
+        }
+      }catch(err){
+        setStatus('Connection error. Please check your internet connection and try again.', 'error');
+      }finally{
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
+    });
+  })();
 
   document.querySelectorAll('#theme-toggle button').forEach(function(btn){
     btn.addEventListener('click', function(){
