@@ -1,4 +1,4 @@
-        <!DOCTYPE html>
+         <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -188,8 +188,37 @@
 
   /* ---------- PAGE 1: HERO ---------- */
   /* The trust strip scrolls upward over the sticky hero. */
-  .hero-stage{position:relative;min-height:calc(100vh + 240px);background:var(--bg);}
-  .hero-section{position:sticky;top:0;z-index:1;min-height:100vh;padding:88px 0 0;background:var(--bg);}
+  /* Hero background image: save your WebP as images/hero-background.webp */
+  .hero-stage{
+    position:relative;
+    min-height:calc(100vh + 240px);
+    background:
+      linear-gradient(rgba(251,246,238,.72), rgba(251,246,238,.72)),
+      url('images/hero-background.webp') center center / cover no-repeat;
+  }
+
+  /* Keep the hero content layer transparent so the background remains visible. */
+  .hero-section{
+    position:sticky;
+    top:0;
+    z-index:1;
+    min-height:100vh;
+    padding:88px 0 0;
+    background:transparent;
+  }
+
+  /* Dark mode keeps the same texture but dims it for readability. */
+  html[data-theme="dark"] .hero-stage{
+    background:
+      linear-gradient(rgba(27,23,18,.84), rgba(27,23,18,.84)),
+      url('images/hero-background.webp') center center / cover no-repeat;
+  }
+
+  @media (max-width:900px){
+    .hero-stage{
+      background-position:center center;
+    }
+  }
   .hero-stage .trust-strip{position:relative;z-index:2;background:var(--bg-alt);box-shadow:0 -18px 32px rgba(58,46,34,.12);}
   html[data-theme="dark"] .hero-stage .trust-strip{box-shadow:0 -18px 32px rgba(0,0,0,.28);}
   .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;padding-bottom:70px;}
