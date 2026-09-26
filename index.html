@@ -1,4 +1,4 @@
-            <!DOCTYPE html>
+             <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -7,6 +7,7 @@
 <meta name="description" content="Janice Balanon is a licensed financial advisor helping individuals and families with life, health, investment, education, retirement, and protection planning.">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preload" as="image" href="images/hero-background.webp" fetchpriority="high">
 
 <link rel="canonical" href="https://askmejanice.com/">
 
@@ -1619,6 +1620,9 @@
           src="images/janice-logo.webp"
           alt="Janice Balanon logo"
           class="janice-logo"
+          width="54"
+          height="54"
+          decoding="async"
         >
       </span>
       <span class="brand-text">
@@ -1662,7 +1666,12 @@
         </div>
       </div>
       <div class="hero-art">
-        <img src="images/janice-hero.jpg" alt="Janice Balanon, Licensed Financial Advisor">
+        <img
+          src="images/janice-hero.webp"
+          alt="Janice Balanon, Licensed Financial Advisor"
+          fetchpriority="high"
+          decoding="async"
+        >
       </div>
     </div>
   </div>
@@ -1680,7 +1689,14 @@
   <div class="wrap">
     <div class="split-banner">
       <div class="art">
-        <img src="https://images.pexels.com/photos/1222949/pexels-photo-1222949.jpeg?auto=compress&w=1260&h=750&dpr=1" alt="Family silhouetted against a sunset, symbolizing a secure future">
+        <img
+          src="https://images.pexels.com/photos/1222949/pexels-photo-1222949.jpeg?auto=compress&w=1260&h=750&dpr=1"
+          alt="Family silhouetted against a sunset, symbolizing a secure future"
+          loading="lazy"
+          decoding="async"
+          width="1260"
+          height="750"
+        >
       </div>
       <div class="copy">
         <p class="eyebrow">YOUR FUTURE, OUR PRIORITY</p>
