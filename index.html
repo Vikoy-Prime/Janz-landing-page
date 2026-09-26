@@ -1,4 +1,4 @@
-          <!DOCTYPE html>
+         <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -192,30 +192,47 @@
   .hero-stage{
     position:relative;
     min-height:calc(100vh + 240px);
-    background:
-      linear-gradient(rgba(251,246,238,.72), rgba(251,246,238,.72)),
-      url('images/hero-background.webp') center center / cover no-repeat;
+    background:var(--bg);
   }
 
-  /* Keep the hero content layer transparent so the background remains visible. */
+  /*
+     Put the artwork on a full-width layer attached ONLY to the hero section.
+     This prevents the image from continuing/repeating below the trust strip.
+  */
   .hero-section{
     position:sticky;
     top:0;
     z-index:1;
     min-height:100vh;
-    padding:88px 0 0;
+    padding:88px 32px 0;
     background:transparent;
+    isolation:isolate;
+  }
+
+  .hero-section::before{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    top:0;
+    bottom:0;
+    left:50%;
+    width:100vw;
+    transform:translateX(-50%);
+    background:
+      linear-gradient(rgba(251,246,238,.72), rgba(251,246,238,.72)),
+      url('images/hero-background.webp') center center / cover no-repeat;
+    pointer-events:none;
   }
 
   /* Dark mode keeps the same texture but dims it for readability. */
-  html[data-theme="dark"] .hero-stage{
+  html[data-theme="dark"] .hero-section::before{
     background:
       linear-gradient(rgba(27,23,18,.84), rgba(27,23,18,.84)),
       url('images/hero-background.webp') center center / cover no-repeat;
   }
 
   @media (max-width:900px){
-    .hero-stage{
+    .hero-section::before{
       background-position:center center;
     }
   }
