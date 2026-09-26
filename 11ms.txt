@@ -1,0 +1,23 @@
+# Ask Me Janice
+
+Website: https://askmejanice.com/
+Name: Janice Balanon
+Role: Financial Advisor
+
+Janice Balanon provides financial guidance for individuals and families, with services covering life protection, health protection, group insurance, investment-linked planning, education planning, retirement planning, and long-term financial protection.
+
+Primary website sections:
+- Home
+- Products
+- Contact
+
+Contact:
+- Phone: +63 919 087 8939
+- Email: balanonjanice@gmail.com
+- Facebook: https://www.facebook.com/share/1DDqEtPQQX/
+
+Canonical website:
+https://askmejanice.com/
+
+Sitemap:
+https://askmejanice.com/sitemap.xml
