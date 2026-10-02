@@ -398,11 +398,67 @@
     background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-md);
     padding:34px 30px;
   }
-  .contact-card .icon{width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;position:relative;overflow:hidden;color:var(--accent);background:linear-gradient(180deg, rgba(255,255,255,.82), rgba(239,220,196,.92));border:1px solid rgba(188,108,63,.12);box-shadow:0 14px 28px rgba(149,80,42,.10), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -10px 18px rgba(188,108,63,.08);}
-  .contact-card .icon::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at 28% 22%, rgba(255,255,255,.75), transparent 45%), radial-gradient(circle at 75% 78%, rgba(188,108,63,.10), transparent 42%);pointer-events:none;}
-  .contact-card .icon svg{width:24px;height:24px;position:relative;z-index:1;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 0 rgba(255,255,255,.55));}
-  html[data-theme="dark"] .contact-card .icon{background:linear-gradient(180deg, rgba(46,37,29,.95), rgba(31,25,20,.98));border-color:rgba(199,123,68,.18);box-shadow:0 16px 32px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.04), inset 0 -12px 22px rgba(199,123,68,.08);}
-  html[data-theme="dark"] .contact-card .icon::before{background:radial-gradient(circle at 28% 22%, rgba(255,255,255,.05), transparent 45%), radial-gradient(circle at 75% 78%, rgba(199,123,68,.14), transparent 42%);}
+  .contact-card .icon{
+    width:64px;
+    height:64px;
+    border-radius:20px;
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:20px;
+    color:var(--accent);
+    background:
+      radial-gradient(circle at 28% 22%, rgba(255,255,255,.96) 0 12%, transparent 13%),
+      linear-gradient(145deg, #FFF5E9 0%, #F6DFC5 58%, #EBC9A4 100%);
+    border:1px solid rgba(188,108,63,.14);
+    box-shadow:
+      0 10px 24px rgba(149,80,42,.12),
+      inset 0 1px 0 rgba(255,255,255,.92),
+      inset 0 -10px 20px rgba(188,108,63,.06);
+  }
+  .contact-card .icon::before,
+  .contact-card .icon::after{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    border-radius:50%;
+    pointer-events:none;
+  }
+  .contact-card .icon::before{
+    width:34px;
+    height:34px;
+    right:-8px;
+    top:-7px;
+    background:rgba(255,255,255,.52);
+  }
+  .contact-card .icon::after{
+    width:28px;
+    height:28px;
+    left:-10px;
+    bottom:-9px;
+    background:rgba(188,108,63,.09);
+  }
+  .contact-card .icon svg{
+    width:42px;
+    height:42px;
+    display:block;
+    position:relative;
+    z-index:1;
+    overflow:visible;
+    filter:drop-shadow(0 5px 6px rgba(149,80,42,.18));
+  }
+  html[data-theme="dark"] .contact-card .icon{
+    background:
+      radial-gradient(circle at 28% 22%, rgba(255,255,255,.14) 0 11%, transparent 12%),
+      linear-gradient(145deg, rgba(199,123,68,.24), rgba(149,80,42,.14));
+    border-color:rgba(227,148,87,.18);
+    box-shadow:
+      0 12px 28px rgba(0,0,0,.24),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
   .contact-card h3{font-size:18px;margin-bottom:6px;}
   .contact-card p{color:var(--slate);font-size:14.5px;}
   .contact-card .value{color:var(--ink);font-weight:700;font-size:16px;margin-top:10px;display:block;}
@@ -1369,15 +1425,15 @@
     }
 
     .contact-card .icon{
-      width:48px;
-      height:48px;
-      margin-bottom:13px;
-      border-radius:15px;
+      width:56px;
+      height:56px;
+      margin-bottom:15px;
+      border-radius:18px;
     }
 
     .contact-card .icon svg{
-      width:21px;
-      height:21px;
+      width:36px;
+      height:36px;
     }
 
     .contact-card .value{
@@ -2029,7 +2085,19 @@
     <div class="contact-grid">
       <div class="contact-card">
         <div class="icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8.45 6.85c.33-.76.6-1.64.66-2.49A1.53 1.53 0 0 0 7.6 2.7H5.48c-.86 0-1.58.67-1.63 1.53-.25 4.17 1.28 8.31 4.39 11.42 3.11 3.11 7.25 4.64 11.42 4.39.86-.05 1.53-.77 1.53-1.63V16.3a1.53 1.53 0 0 0-1.66-1.51c-.85.06-1.73.33-2.49.66a1.83 1.83 0 0 1-2.01-.37l-1.55-1.55a15.38 15.38 0 0 1-2.99-2.99L8.82 8.86a1.83 1.83 0 0 1-.37-2.01Z" stroke="currentColor" stroke-width="1.9"/><path d="M14.75 4.5a4.75 4.75 0 0 1 4.75 4.75" stroke="currentColor" stroke-width="1.7"/><path d="M14.75 1.75A7.5 7.5 0 0 1 22.25 9.25" stroke="currentColor" stroke-width="1.7"/></svg>
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="contactPhoneGrad" x1="10" y1="8" x2="37" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFBC82"/>
+                <stop offset=".56" stop-color="#E3773D"/>
+                <stop offset="1" stop-color="#A94F28"/>
+              </linearGradient>
+            </defs>
+            <path d="M13.1 8.8c.8-1.7 2.3-2.8 4.1-2.8h3.2c1.7 0 3 1.2 3.3 2.8l.8 4.5c.2 1.3-.2 2.6-1.2 3.5l-3.1 2.8c2.1 4.4 5.7 8 10.1 10.1l2.8-3.1c.9-1 2.2-1.4 3.5-1.2l4.5.8c1.6.3 2.8 1.6 2.8 3.3v3.2c0 1.8-1.1 3.3-2.8 4.1-2.1 1-4.4 1.5-6.8 1.4-7.3-.2-14.6-3.4-20.4-9.2S4.9 16 4.7 8.7c-.1-2.4.4-4.7 1.4-6.8" transform="translate(0 2)" fill="url(#contactPhoneGrad)"/>
+            <path d="M30.5 9.2a8.2 8.2 0 0 1 8.2 8.2" stroke="#C45B2E" stroke-width="3" stroke-linecap="round"/>
+            <path d="M31.1 3.7A13.1 13.1 0 0 1 44.2 16.8" stroke="#E99961" stroke-width="2.5" stroke-linecap="round" opacity=".9"/>
+            <path d="M10.9 9.6c1.1-1.7 2.4-2.4 4.1-2.6" stroke="#FFD9B9" stroke-width="1.7" stroke-linecap="round" opacity=".82"/>
+          </svg>
         </div>
         <h3>Call or Text</h3>
         <p>Available Mon&ndash;Sat, 8am&ndash;5pm</p>
@@ -2037,7 +2105,23 @@
       </div>
       <div class="contact-card">
         <div class="icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.9"/><path d="M6 8l5.07 4.23a1.5 1.5 0 0 0 1.92 0L18 8" stroke="currentColor" stroke-width="1.9"/><path d="M9 14.5H7.25" stroke="currentColor" stroke-width="1.7"/></svg>
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="contactMailGrad" x1="9" y1="9" x2="39" y2="38" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFBE84"/>
+                <stop offset=".58" stop-color="#DF783E"/>
+                <stop offset="1" stop-color="#A84E28"/>
+              </linearGradient>
+              <linearGradient id="contactMailFlap" x1="13" y1="14" x2="35" y2="27" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFF7ED"/>
+                <stop offset="1" stop-color="#FFE0C2"/>
+              </linearGradient>
+            </defs>
+            <rect x="7" y="10" width="34" height="28" rx="7" fill="url(#contactMailGrad)"/>
+            <path d="m11.5 15 10 8.2c1.5 1.2 3.5 1.2 5 0l10-8.2" fill="none" stroke="url(#contactMailFlap)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="m10.5 34 9.2-8.2M37.5 34l-9.2-8.2" stroke="#F6C59E" stroke-width="2" stroke-linecap="round" opacity=".72"/>
+            <path d="M11.8 13.6h12.5" stroke="#FFD9B7" stroke-width="1.7" stroke-linecap="round" opacity=".78"/>
+          </svg>
         </div>
         <h3>Email</h3>
         <p>For consultation, questions, and policy support</p>
