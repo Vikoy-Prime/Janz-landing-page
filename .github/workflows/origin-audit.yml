@@ -45,4 +45,7 @@ jobs:
             .map(x=>({id:x.id,title:x.title,score:x.score,displayValue:x.displayValue||null}))
             .slice(0,50);
           console.log('FAILING='+JSON.stringify(failing));
+          console.log('DETAIL_ERRORS='+JSON.stringify((a['errors-in-console']?.details?.items || []).slice(0,20)));
+          console.log('DETAIL_UNUSED_JS='+JSON.stringify((a['unused-javascript']?.details?.items || []).slice(0,20)));
+          console.log('DETAIL_CACHE='+JSON.stringify((a['cache-insight']?.details?.items || []).slice(0,20)));
           NODE
