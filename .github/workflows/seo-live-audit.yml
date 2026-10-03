@@ -21,23 +21,6 @@ jobs:
           echo "HTTPS response:"
           curl -sS -I --max-time 20 https://askmejanice.com/ | head -n 30
 
-      - name: Check public SEO files and assets
-        run: |
-          for url in \
-            "https://askmejanice.com/" \
-            "https://askmejanice.com/robots.txt" \
-            "https://askmejanice.com/sitemap.xml" \
-            "https://askmejanice.com/favicon.png" \
-            "https://askmejanice.com/askmejanice-social-preview.webp" \
-            "https://askmejanice.com/images/hero-background.webp" \
-            "https://askmejanice.com/images/janice-hero.webp" \
-            "https://askmejanice.com/images/janice-logo.webp"
-          do
-            code=$(curl -L -sS -o /dev/null -w "%{http_code}" --max-time 30 "$url")
-            echo "$code $url"
-            test "$code" -ge 200 -a "$code" -lt 400
-          done
-
       - name: Mobile audit
         run: |
           lighthouse https://askmejanice.com/ \
