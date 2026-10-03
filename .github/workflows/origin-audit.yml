@@ -15,6 +15,7 @@ jobs:
       - run: npm install -g lighthouse
       - name: Audit direct GitHub Pages origin
         run: |
+          sleep 35
           ORIGIN="https://vikoy-prime.github.io/Janz-landing-page/"
           echo "=== ORIGIN HEADERS ==="
           curl -sS -I "$ORIGIN" | head -n 20
