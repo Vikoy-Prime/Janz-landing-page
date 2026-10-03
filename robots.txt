@@ -11,3 +11,4 @@ User-agent: OAI-SearchBot
 Allow: /
 
 Sitemap: https://askmejanice.com/sitemap.xml
+Sitemap: https://askmejanice.com/sitemap.txt
