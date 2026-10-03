@@ -1,0 +1,30 @@
+https://askmejanice.com/*
+  Strict-Transport-Security: max-age=31536000
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=()
+
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+  Link: <https://askmejanice.com/>; rel="canonical"
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+  Link: <https://askmejanice.com/>; rel="canonical"
+
+/images/*
+  Cache-Control: public, max-age=604800
+
+/favicon.png
+  Cache-Control: public, max-age=604800
+
+/askmejanice-social-preview.webp
+  Cache-Control: public, max-age=604800
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8
