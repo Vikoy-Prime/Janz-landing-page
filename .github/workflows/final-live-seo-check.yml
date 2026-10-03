@@ -1,0 +1,25 @@
+name: Final live SEO check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-live-seo-check.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check live SEO files
+        run: |
+          for url in             "https://askmejanice.com/"             "https://askmejanice.com/robots.txt"             "https://askmejanice.com/sitemap.xml"             "https://askmejanice.com/privacy.html"
+          do
+            echo "=== $url ==="
+            curl -sS -I "$url" | head -n 10
+          done
+
+          echo "=== sitemap body ==="
+          curl -sS "https://askmejanice.com/sitemap.xml"
