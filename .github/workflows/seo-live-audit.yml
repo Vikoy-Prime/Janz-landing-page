@@ -1,0 +1,75 @@
+name: SEO live audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/seo-live-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Lighthouse
+        run: npm install -g lighthouse
+
+      - name: Check HTTPS redirect and headers
+        run: |
+          echo "HTTP response:"
+          curl -sS -I --max-time 20 http://askmejanice.com/ | head -n 20
+          echo "HTTPS response:"
+          curl -sS -I --max-time 20 https://askmejanice.com/ | head -n 30
+
+      - name: Mobile audit
+        run: |
+          lighthouse https://askmejanice.com/ \
+            --chrome-flags="--headless --no-sandbox" \
+            --only-categories=performance \
+            --output=json \
+            --output-path=mobile.json \
+            --quiet
+          node - <<'NODE'
+          const fs=require('fs');
+          const r=JSON.parse(fs.readFileSync('mobile.json','utf8'));
+          const a=r.audits;
+          console.log(JSON.stringify({
+            mode:'mobile',
+            performance:Math.round((r.categories.performance.score||0)*100),
+            fcp:a['first-contentful-paint']?.displayValue,
+            lcp:a['largest-contentful-paint']?.displayValue,
+            cls:a['cumulative-layout-shift']?.displayValue,
+            tbt:a['total-blocking-time']?.displayValue,
+            speedIndex:a['speed-index']?.displayValue,
+            interactive:a['interactive']?.displayValue,
+            unusedJs:a['unused-javascript']?.displayValue || null,
+            renderBlocking:a['render-blocking-resources']?.displayValue || null
+          },null,2));
+          NODE
+
+      - name: Desktop audit
+        run: |
+          lighthouse https://askmejanice.com/ \
+            --preset=desktop \
+            --chrome-flags="--headless --no-sandbox" \
+            --only-categories=performance \
+            --output=json \
+            --output-path=desktop.json \
+            --quiet
+          node - <<'NODE'
+          const fs=require('fs');
+          const r=JSON.parse(fs.readFileSync('desktop.json','utf8'));
+          const a=r.audits;
+          console.log(JSON.stringify({
+            mode:'desktop',
+            performance:Math.round((r.categories.performance.score||0)*100),
+            fcp:a['first-contentful-paint']?.displayValue,
+            lcp:a['largest-contentful-paint']?.displayValue,
+            cls:a['cumulative-layout-shift']?.displayValue,
+            tbt:a['total-blocking-time']?.displayValue,
+            speedIndex:a['speed-index']?.displayValue,
+            interactive:a['interactive']?.displayValue
+          },null,2));
+          NODE
