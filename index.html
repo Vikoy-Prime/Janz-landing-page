@@ -1,43 +1,66 @@
                 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-<!-- Google Analytics: defer until real interaction or after the critical render window -->
+<!-- Google Analytics: loads only after visitor consent -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
 
   (function(){
-    var loaded = false;
-    var interactionEvents = ['pointerdown', 'keydown', 'touchstart'];
-
-    function cleanup(){
-      interactionEvents.forEach(function(eventName){
-        window.removeEventListener(eventName, loadAnalytics);
-      });
-    }
+    var analyticsLoaded = false;
+    var CONSENT_KEY = 'askmejanice_analytics_consent';
 
     function loadAnalytics(){
-      if (loaded) return;
-      loaded = true;
-      cleanup();
+      if (analyticsLoaded) return;
+      analyticsLoaded = true;
 
       var script = document.createElement('script');
       script.async = true;
       script.src = 'https://www.googletagmanager.com/gtag/js?id=G-SPSP8KWFKK';
       script.onload = function(){
         gtag('js', new Date());
-        gtag('config', 'G-SPSP8KWFKK');
+        gtag('config', 'G-SPSP8KWFKK', {
+          anonymize_ip: true
+        });
       };
       document.head.appendChild(script);
     }
 
-    interactionEvents.forEach(function(eventName){
-      window.addEventListener(eventName, loadAnalytics, { once: true, passive: true });
-    });
+    function saveConsent(value){
+      try {
+        localStorage.setItem(CONSENT_KEY, value);
+      } catch (e) {}
+    }
 
-    window.addEventListener('load', function(){
-      setTimeout(loadAnalytics, 7000);
-    }, { once: true });
+    function getConsent(){
+      try {
+        return localStorage.getItem(CONSENT_KEY);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    window.setAnalyticsConsent = function(allowed){
+      saveConsent(allowed ? 'granted' : 'denied');
+      if (allowed) loadAnalytics();
+
+      var banner = document.getElementById('analytics-consent');
+      if (banner) banner.hidden = true;
+    };
+
+    window.addEventListener('DOMContentLoaded', function(){
+      var consent = getConsent();
+
+      if (consent === 'granted') {
+        loadAnalytics();
+        return;
+      }
+
+      if (consent === 'denied') return;
+
+      var banner = document.getElementById('analytics-consent');
+      if (banner) banner.hidden = false;
+    });
   })();
 </script>
 <meta charset="UTF-8">
@@ -1803,6 +1826,72 @@
   }
 
 
+
+  .analytics-consent{
+    position:fixed;
+    left:18px;
+    right:18px;
+    bottom:18px;
+    z-index:9999;
+    max-width:760px;
+    margin:0 auto;
+    padding:16px 18px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:var(--surface);
+    box-shadow:0 18px 48px rgba(0,0,0,.16);
+    color:var(--ink);
+  }
+  .analytics-consent[hidden]{display:none !important;}
+  .analytics-consent-copy p{
+    margin:4px 0 0;
+    font-size:13px;
+    line-height:1.5;
+    color:var(--slate);
+  }
+  .analytics-consent-actions{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+  }
+  .analytics-consent button{
+    border-radius:10px;
+    padding:10px 14px;
+    font:inherit;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .consent-primary{
+    border:1px solid var(--accent-deep);
+    background:var(--accent-deep);
+    color:#fff;
+  }
+  .consent-secondary{
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink);
+  }
+  .consent-link{
+    display:inline-block;
+    margin-top:10px;
+    font-size:12px;
+    color:var(--slate);
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
+  @media(max-width:560px){
+    .analytics-consent{
+      left:12px;
+      right:12px;
+      bottom:12px;
+      padding:14px;
+    }
+    .analytics-consent-actions{
+      flex-direction:column-reverse;
+    }
+    .analytics-consent button{width:100%;}
+  }
+
 </style>
 <script type="application/ld+json">
 {
@@ -1853,6 +1942,18 @@
 
 </head>
 <body>
+<div id="analytics-consent" class="analytics-consent" hidden role="dialog" aria-live="polite" aria-label="Analytics preference">
+  <div class="analytics-consent-copy">
+    <strong>Analytics preference</strong>
+    <p>We use Google Analytics to understand general website usage. Analytics will only load if you allow it.</p>
+  </div>
+  <div class="analytics-consent-actions">
+    <button type="button" class="consent-secondary" onclick="setAnalyticsConsent(false)">No thanks</button>
+    <button type="button" class="consent-primary" onclick="setAnalyticsConsent(true)">Allow analytics</button>
+  </div>
+  <a href="privacy.html" class="consent-link">Privacy Policy</a>
+</div>
+
 
 <header>
   <div class="nav">
