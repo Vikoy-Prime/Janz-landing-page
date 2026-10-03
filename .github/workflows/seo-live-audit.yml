@@ -26,6 +26,8 @@ jobs:
           curl -sS -o /dev/null -w '%{http_code} %{content_type}\n' https://askmejanice.com/robots.txt
           echo "=== SITEMAP ==="
           curl -sS -o /dev/null -w '%{http_code} %{content_type}\n' https://askmejanice.com/sitemap.xml
+          echo "=== TEXT SITEMAP ==="
+          curl -sS -o /dev/null -w '%{http_code} %{content_type}\n' https://askmejanice.com/sitemap.txt
           echo "=== OG IMAGE ==="
           curl -sS -o /dev/null -w '%{http_code} %{content_type} %{size_download}\n' https://askmejanice.com/askmejanice-social-preview.webp
           echo "=== PEXELS IMAGE ==="
