@@ -65,6 +65,10 @@ jobs:
             .map(x=>({id:x.id,title:x.title,score:x.score,displayValue:x.displayValue||null}))
             .slice(0,40);
           console.log('FAILING_AUDITS='+JSON.stringify(failing));
+          for (const id of ['color-contrast','label-content-name-mismatch','image-delivery-insight','cache-insight','deprecations','third-party-cookies']) {
+            const d=a[id]?.details?.items || [];
+            console.log('DETAIL_'+id+'='+JSON.stringify(d.slice(0,12)));
+          }
           NODE
 
       - name: Desktop Lighthouse audit
