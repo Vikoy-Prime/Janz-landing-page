@@ -3,8 +3,6 @@ name: Direct origin performance audit
 on:
   push:
     branches: [main]
-    paths:
-      - '.github/workflows/origin-audit.yml'
 
 permissions:
   contents: read
