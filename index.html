@@ -631,6 +631,23 @@
     text-underline-offset:2px;
   }
 
+  .form-consent{
+    display:flex;
+    align-items:flex-start;
+    gap:9px;
+    margin:2px 0 0;
+    font-size:12px;
+    line-height:1.45;
+    color:var(--slate);
+    cursor:pointer;
+  }
+  .form-consent input{
+    width:auto;
+    margin:3px 0 0;
+    flex:0 0 auto;
+    accent-color:var(--accent-deep);
+  }
+
   #contact-submit[disabled]{
     opacity:.68;
     cursor:not-allowed;
@@ -2397,8 +2414,14 @@
         <div id="form-status" class="form-status" role="status" aria-live="polite"></div>
 
         <p class="form-privacy-note">
-          By submitting this form, you agree that the information you provide may be used only to respond to your inquiry and may be processed through Formspree. Please do not include sensitive financial, medical, government ID, password, or account information. <a href="privacy.html">Privacy Policy</a>.
+          Information submitted here is used only to respond to your inquiry and is processed through Formspree. Please do not include sensitive financial, medical, government ID, password, or account information. <a href="privacy.html">Privacy Policy</a>.
         </p>
+
+        <label class="form-consent">
+          <input type="checkbox" id="cf-privacy-consent" required>
+          <span>I have read the Privacy Policy and understand how my inquiry information is handled.</span>
+        </label>
+        <div class="field-error" id="cf-privacy-consent-error">Please review and acknowledge the Privacy Policy before sending.</div>
 
         <button
           type="submit"
@@ -2623,6 +2646,7 @@
       phone: document.getElementById('cf-phone'),
       message: document.getElementById('cf-message')
     };
+    var privacyConsent = document.getElementById('cf-privacy-consent');
 
     function setStatus(message, type){
       statusBox.textContent = message;
@@ -2705,14 +2729,18 @@
     }
 
     function validateForm(){
-      var results = [
-        validateName(),
-        validateEmail(),
-        validatePhone(),
-        validateMessage()
-      ];
+      var valid =
+        validateName() &
+        validateEmail() &
+        validatePhone() &
+        validateMessage();
 
-      return results.every(Boolean);
+      var consentError = document.getElementById('cf-privacy-consent-error');
+      var consentValid = !!(privacyConsent && privacyConsent.checked);
+      if(consentError) consentError.classList.toggle('show', !consentValid);
+      if(privacyConsent) privacyConsent.setAttribute('aria-invalid', consentValid ? 'false' : 'true');
+
+      return Boolean(valid) && consentValid;
     }
 
     Object.keys(fields).forEach(function(key){
@@ -2787,6 +2815,7 @@
           document.querySelectorAll('.field-error').forEach(function(el){
             el.classList.remove('show');
           });
+          if(privacyConsent) privacyConsent.setAttribute('aria-invalid','false');
 
           setStatus("Message sent successfully. Thank you! I'll get back to you soon.", 'success');
         }else{
