@@ -3,8 +3,6 @@ name: AskMeJanice live SEO audit
 on:
   push:
     branches: [main]
-    paths:
-      - '.github/workflows/seo-live-audit.yml'
 
 permissions:
   contents: read
