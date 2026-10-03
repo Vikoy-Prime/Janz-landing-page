@@ -1,0 +1,45 @@
+name: Direct origin performance audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/origin-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install -g lighthouse
+      - name: Audit direct GitHub Pages origin
+        run: |
+          ORIGIN="https://vikoy-prime.github.io/Janz-landing-page/"
+          echo "=== ORIGIN HEADERS ==="
+          curl -sS -I "$ORIGIN" | head -n 20
+          lighthouse "$ORIGIN" \
+            --chrome-flags="--headless --no-sandbox" \
+            --only-categories=performance,seo,accessibility,best-practices \
+            --output=json \
+            --output-path=origin.json \
+            --quiet
+          node - <<'NODE'
+          const fs=require('fs');
+          const r=JSON.parse(fs.readFileSync('origin.json','utf8'));
+          const a=r.audits;
+          console.log(JSON.stringify({
+            performance:Math.round((r.categories.performance.score||0)*100),
+            seo:Math.round((r.categories.seo.score||0)*100),
+            accessibility:Math.round((r.categories.accessibility.score||0)*100),
+            bestPractices:Math.round((r.categories['best-practices'].score||0)*100),
+            fcp:a['first-contentful-paint']?.displayValue,
+            lcp:a['largest-contentful-paint']?.displayValue,
+            cls:a['cumulative-layout-shift']?.displayValue,
+            tbt:a['total-blocking-time']?.displayValue,
+            speedIndex:a['speed-index']?.displayValue,
+            interactive:a['interactive']?.displayValue
+          },null,2));
+          NODE
