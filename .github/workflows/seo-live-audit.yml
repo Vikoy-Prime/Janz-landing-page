@@ -60,6 +60,11 @@ jobs:
             unusedJs:a['unused-javascript']?.displayValue || null,
             renderBlocking:a['render-blocking-resources']?.displayValue || null
           },null,2));
+          const failing=Object.values(r.audits)
+            .filter(x=>x && typeof x.score==='number' && x.score<1 && x.scoreDisplayMode!=='notApplicable')
+            .map(x=>({id:x.id,title:x.title,score:x.score,displayValue:x.displayValue||null}))
+            .slice(0,40);
+          console.log('FAILING_AUDITS='+JSON.stringify(failing));
           NODE
 
       - name: Desktop Lighthouse audit
