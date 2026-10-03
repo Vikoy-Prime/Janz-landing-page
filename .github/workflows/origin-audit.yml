@@ -40,4 +40,9 @@ jobs:
             speedIndex:a['speed-index']?.displayValue,
             interactive:a['interactive']?.displayValue
           },null,2));
+          const failing=Object.values(r.audits)
+            .filter(x=>x && typeof x.score==='number' && x.score<1 && x.scoreDisplayMode!=='notApplicable')
+            .map(x=>({id:x.id,title:x.title,score:x.score,displayValue:x.displayValue||null}))
+            .slice(0,50);
+          console.log('FAILING='+JSON.stringify(failing));
           NODE
