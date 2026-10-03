@@ -1,25 +1,17 @@
                 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-<!-- Google Analytics: load after the initial render to reduce main-thread blocking -->
+<!-- Google Analytics: load during browser idle time so it does not block the initial render -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
 
   (function(){
     var loaded = false;
-    var interactionEvents = ['pointerdown', 'keydown', 'touchstart', 'scroll'];
-
-    function cleanupInteractionListeners(){
-      interactionEvents.forEach(function(eventName){
-        window.removeEventListener(eventName, loadAnalytics, { passive: true });
-      });
-    }
 
     function loadAnalytics(){
       if (loaded) return;
       loaded = true;
-      cleanupInteractionListeners();
 
       var script = document.createElement('script');
       script.async = true;
@@ -31,16 +23,13 @@
       document.head.appendChild(script);
     }
 
-    interactionEvents.forEach(function(eventName){
-      window.addEventListener(eventName, loadAnalytics, {
-        once: true,
-        passive: true
-      });
-    });
-
-    window.addEventListener('load', function(){
-      setTimeout(loadAnalytics, 6000);
-    }, { once: true });
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(loadAnalytics, { timeout: 5000 });
+    } else {
+      window.addEventListener('load', function(){
+        setTimeout(loadAnalytics, 2500);
+      }, { once: true });
+    }
   })();
 </script>
 <meta charset="UTF-8">
