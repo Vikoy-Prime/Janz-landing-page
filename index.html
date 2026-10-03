@@ -2254,7 +2254,7 @@
         </div>
 
         <div class="form-field">
-          <label for="cf-phone">Phone number <span class="required-mark">*</span></label>
+          <label for="cf-phone">Phone number <span style="font-weight:400;">(optional)</span></label>
           <input
             type="tel"
             id="cf-phone"
@@ -2264,7 +2264,6 @@
             inputmode="tel"
             maxlength="20"
             aria-describedby="cf-phone-error"
-            required
           >
           <div class="field-error" id="cf-phone-error">Please enter a valid Philippine mobile number, e.g. 0919 123 4567.</div>
         </div>
@@ -2573,6 +2572,13 @@
 
     function validatePhone(){
       var raw = fields.phone.value.trim();
+
+      if (!raw) {
+        fields.phone.classList.remove('input-error', 'input-valid');
+        document.getElementById('cf-phone-error').classList.remove('show');
+        return true;
+      }
+
       var normalized = raw.replace(/[\s().-]/g, '');
       var valid = /^(?:\+63|0)9\d{9}$/.test(normalized);
 
@@ -2580,9 +2586,7 @@
         fields.phone,
         'cf-phone-error',
         valid,
-        raw
-          ? 'Please enter a valid Philippine mobile number, e.g. 0919 123 4567.'
-          : 'Phone number is required.'
+        'Please enter a valid Philippine mobile number, e.g. 0919 123 4567.'
       );
     }
 
