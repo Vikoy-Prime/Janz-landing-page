@@ -601,6 +601,13 @@
     color:var(--slate);
   }
 
+  .form-privacy-note a,
+  .footer-privacy a{
+    color:inherit;
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
+
   #contact-submit[disabled]{
     opacity:.68;
     cursor:not-allowed;
@@ -2290,7 +2297,7 @@
         <div id="form-status" class="form-status" role="status" aria-live="polite"></div>
 
         <p class="form-privacy-note">
-          By submitting this form, you agree that the information you provide may be used only to respond to your inquiry and may be processed through Formspree. Please do not include sensitive financial, medical, government ID, password, or account information.
+          By submitting this form, you agree that the information you provide may be used only to respond to your inquiry and may be processed through Formspree. Please do not include sensitive financial, medical, government ID, password, or account information. <a href="privacy.html">Privacy Policy</a>.
         </p>
 
         <button
@@ -2347,6 +2354,7 @@
       </div>
     </div>
   </div>
+  <div class="footer-privacy"><a href="privacy.html">Privacy Policy</a></div>
 </footer>
 
 <script>
